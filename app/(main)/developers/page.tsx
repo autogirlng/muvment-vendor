@@ -12,7 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Modal, ModalContent, ModalHeader, ModalTitle, ModalDescription, ModalFooter } from "@/components/ui/modal";
 import { 
   Terminal, Key, ShieldAlert, Plus, Copy, AlertTriangle, CheckCircle2, 
-  Trash2, Loader2, Building2
+  Trash2, Loader2, Building2, BookOpen, ExternalLink
 } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
@@ -235,6 +235,25 @@ export default function DevelopersPage() {
         </div>
 
         <div className="space-y-6">
+          <Card className="border-border/60 shadow-sm bg-brand-50 dark:bg-brand-950/20 border-brand-200 dark:border-brand-900/50">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-brand-600 dark:text-brand-400" /> API Documentation
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-sm text-brand-800/80 dark:text-brand-200/80">
+              <p>
+                Ready to start building? Check out our official API documentation for comprehensive guides and endpoint references.
+              </p>
+              <Button asChild variant="outline" className="w-full bg-background hover:bg-muted text-foreground border-border/60 shadow-sm transition-all group">
+                <a href="https://muvment-vendor-api.readme.io/reference/getmaintenance" target="_blank" rel="noopener noreferrer">
+                  Explore Docs 
+                  <ExternalLink className="w-4 h-4 ml-2 opacity-70 group-hover:opacity-100 transition-opacity" />
+                </a>
+              </Button>
+            </CardContent>
+          </Card>
+
           <Card className="border-border/60 shadow-sm bg-muted/20">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
