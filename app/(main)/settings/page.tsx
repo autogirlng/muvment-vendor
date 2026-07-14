@@ -12,7 +12,7 @@ import {
 import { format } from "date-fns";
 
 export default function SettingsPage() {
-  const { activeVendorId, isVendorContextLoading } = useVendor();
+  const { activeVendorId, isLoading: isVendorContextLoading } = useVendor();
 
   const { data: vendorRes, isLoading } = useQuery({
     queryKey: ["vendorDetails", activeVendorId],

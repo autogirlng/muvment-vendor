@@ -1,15 +1,7 @@
-import NextAuth, { AuthError } from "next-auth";
+import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
-
-class CustomAuthError extends AuthError {
-  type: string;
-  constructor(message: string) {
-    super();
-    this.type = message;
-  }
-}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -52,12 +44,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             };
           }
 
-          throw new CustomAuthError(data.message || "Invalid credentials");
+          throw new Error(data.message || "Invalid credentials");
         } catch (error: any) {
-          if (error instanceof CustomAuthError) {
-            throw error;
-          }
-          throw new CustomAuthError(error.message || "Login failed");
+          throw new Error(error.message || "Login failed");
         }
       },
     }),
