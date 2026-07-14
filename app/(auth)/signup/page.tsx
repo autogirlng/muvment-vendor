@@ -13,11 +13,12 @@ function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const inviteToken = searchParams.get("token");
+  const defaultEmail = searchParams.get("email") || "";
 
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
+    email: defaultEmail,
     password: "",
     phoneNumber: "",
     countryCode: "234",

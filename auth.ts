@@ -90,4 +90,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   secret:
     process.env.NEXTAUTH_SECRET ||
     "FDrGED/rt0eIB17PWxUCQRDEl2DOpGjxNRztAKpnV150q0v1gRJ79Oa7Gck=",
+  trustHost: true,
 });
