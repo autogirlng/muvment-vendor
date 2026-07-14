@@ -245,11 +245,13 @@ export default function DevelopersPage() {
               <p>
                 Ready to start building? Check out our official API documentation for comprehensive guides and endpoint references.
               </p>
-              <Button asChild variant="outline" className="w-full bg-background hover:bg-muted text-foreground border-border/60 shadow-sm transition-all group">
-                <a href="https://muvment-vendor-api.readme.io/reference/getmaintenance" target="_blank" rel="noopener noreferrer">
-                  Explore Docs 
-                  <ExternalLink className="w-4 h-4 ml-2 opacity-70 group-hover:opacity-100 transition-opacity" />
-                </a>
+              <Button 
+                variant="outline" 
+                className="w-full bg-background hover:bg-muted text-foreground border-border/60 shadow-sm transition-all group"
+                onClick={() => window.open("https://muvment-vendor-api.readme.io/reference/getmaintenance", "_blank", "noopener noreferrer")}
+              >
+                Explore Docs 
+                <ExternalLink className="w-4 h-4 ml-2 opacity-70 group-hover:opacity-100 transition-opacity" />
               </Button>
             </CardContent>
           </Card>
