@@ -100,20 +100,45 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-brand-500 text-white flex items-center justify-center font-bold text-sm">1</div>
-              <div className="flex-1">
-                <p className="font-medium text-sm">Complete KYC Verification</p>
-                <p className="text-xs text-muted-foreground">Upload required business documents</p>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm
+                ${activeVendor.kycStatus === 'APPROVED' ? 'bg-green-500 text-white' : 
+                  activeVendor.kycStatus === 'UNDER_REVIEW' ? 'bg-yellow-500 text-white' : 
+                  'bg-brand-500 text-white'}`}>
+                1
               </div>
-              <Button size="sm" variant="outline">Start</Button>
+              <div className="flex-1">
+                <p className="font-medium text-sm">
+                  {activeVendor.kycStatus === 'APPROVED' ? 'KYC Verified' : 'Complete KYC Verification'}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {activeVendor.kycStatus === 'APPROVED' ? 'Your business is verified.' : 
+                   activeVendor.kycStatus === 'UNDER_REVIEW' ? 'Your documents are currently under review.' : 
+                   'Upload required business documents'}
+                </p>
+              </div>
+              {activeVendor.kycStatus === 'APPROVED' ? (
+                <span className="text-sm font-semibold text-green-600 dark:text-green-400 mr-2">Done</span>
+              ) : activeVendor.kycStatus === 'UNDER_REVIEW' ? (
+                <span className="text-sm font-semibold text-yellow-600 dark:text-yellow-400 mr-2">Pending</span>
+              ) : (
+                <Link href="/vendor/kyc">
+                  <Button size="sm" variant="default" className="shadow-md hover:shadow-lg transition-all">Start</Button>
+                </Link>
+              )}
             </div>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center font-bold text-sm">2</div>
+            
+            <div className={`flex items-center gap-3 ${activeVendor.kycStatus !== 'APPROVED' ? 'opacity-50 grayscale' : ''}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm
+                ${activeVendor.kycStatus === 'APPROVED' ? 'bg-brand-500 text-white' : 'bg-muted text-muted-foreground'}`}>
+                2
+              </div>
               <div className="flex-1">
                 <p className="font-medium text-sm">Add Vehicles</p>
-                <p className="text-xs text-muted-foreground">Register your fleet</p>
+                <p className="text-xs text-muted-foreground">Register your fleet to start earning</p>
               </div>
-              <Button size="sm" variant="outline" disabled>Pending KYC</Button>
+              <Button size="sm" variant="outline" disabled={activeVendor.kycStatus !== 'APPROVED'}>
+                {activeVendor.kycStatus !== 'APPROVED' ? 'Pending KYC' : 'Start'}
+              </Button>
             </div>
           </CardContent>
         </Card>

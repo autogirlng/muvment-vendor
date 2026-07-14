@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { LayoutDashboard, Store, LogOut, Settings, Bell, Menu, X } from "lucide-react";
+import { LayoutDashboard, Store, LogOut, Settings, Bell, Menu, X, Users, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Modal, ModalContent, ModalHeader, ModalTitle, ModalDescription, ModalFooter } from "@/components/ui/modal";
@@ -84,12 +84,22 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         </div>
 
         <div className="flex-1 py-4 px-4 space-y-1.5 overflow-y-auto">
-          <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-brand-50 dark:bg-brand-950/50 text-brand-700 dark:text-brand-300 font-medium transition-colors">
+          <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
             <LayoutDashboard className="w-5 h-5" />
             Dashboard
           </Link>
+
+          <Link href="/team" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
+            <Users className="w-5 h-5" />
+            Team Members
+          </Link>
+
+          <Link href="/developers" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
+            <Terminal className="w-5 h-5" />
+            Developers
+          </Link>
           
-          <Link href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="/settings" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
             <Settings className="w-5 h-5" />
             Settings
           </Link>

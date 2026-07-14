@@ -1,15 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AuthAPI } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Loader2 } from "lucide-react";
 
-export default function SignupPage() {
+function SignupForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const inviteToken = searchParams.get("token");
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -17,7 +21,7 @@ export default function SignupPage() {
     password: "",
     phoneNumber: "",
     countryCode: "234",
-    userType: "VENDOR_STAFF" // Defaulting to VENDOR_STAFF for this vendor portal
+    userType: "CUSTOMER" 
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -32,7 +36,12 @@ export default function SignupPage() {
     setError("");
 
     try {
-      await AuthAPI.signup(formData);
+      const payload: any = { ...formData };
+      if (inviteToken) {
+        payload.inviteToken = inviteToken;
+      }
+
+      await AuthAPI.signup(payload);
       // Redirect to verify account page on success and pass the email
       router.push(`/verify-account?email=${encodeURIComponent(formData.email)}`);
     } catch (err: any) {
@@ -47,7 +56,9 @@ export default function SignupPage() {
       <div className="flex flex-col space-y-2 text-center lg:text-left">
         <h1 className="text-3xl font-semibold tracking-tight">Create an account</h1>
         <p className="text-sm text-muted-foreground">
-          Enter your details to get started with AutoGirl
+          {inviteToken 
+            ? "You've been invited! Enter your details to join the organization." 
+            : "Enter your details to get started with AutoGirl"}
         </p>
       </div>
 
@@ -155,5 +166,17 @@ export default function SignupPage() {
         </Link>
       </p>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-[400px] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-brand-500" />
+      </div>
+    }>
+      <SignupForm />
+    </Suspense>
   );
 }

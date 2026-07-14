@@ -1,7 +1,15 @@
-import NextAuth from "next-auth";
+import NextAuth, { AuthError } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+
+class CustomAuthError extends AuthError {
+  type: string;
+  constructor(message: string) {
+    super();
+    this.type = message;
+  }
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -29,7 +37,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const data = await res.json();
 
           if (res.ok && data.status === "SUCCESSFUL" && data.data) {
-            // NextAuth expects a User object. We will embed tokens and raw data inside it.
+            // Strip out large unneeded fields and duplicates to keep the JWT size small
+            const { accessibleRoutes, organizations, vendors, ...cleanedRawData } = data.data;
+
             return {
               id: data.data.userId,
               name: `${data.data.firstName} ${data.data.lastName}`,
@@ -38,13 +48,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               refreshToken: data.data.refreshToken,
               vendors: data.data.vendors || [],
               userType: data.data.userType,
-              rawData: data.data,
+              rawData: cleanedRawData,
             };
           }
 
-          throw new Error(data.message || "Invalid credentials");
+          throw new CustomAuthError(data.message || "Invalid credentials");
         } catch (error: any) {
-          throw new Error(error.message);
+          if (error instanceof CustomAuthError) {
+            throw error;
+          }
+          throw new CustomAuthError(error.message || "Login failed");
         }
       },
     }),
@@ -86,5 +99,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     maxAge: 24 * 60 * 60, // 24 hours
   },
   secret:
-    process.env.NEXTAUTH_SECRET || "default_secret_for_development_only_12345",
+    process.env.NEXTAUTH_SECRET ||
+    "FDrGED/rt0eIB17PWxUCQRDEl2DOpGjxNRztAKpnV150q0v1gRJ79Oa7Gck=",
 });

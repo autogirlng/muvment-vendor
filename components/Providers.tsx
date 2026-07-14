@@ -73,6 +73,8 @@ function SessionExpirationModal({ isOpen, onOpenChange }: { isOpen: boolean, onO
 
 import { VendorProvider } from "./VendorContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Create a client (outside component to avoid recreation on re-renders, unless we need SSR specific handling.
 // For Next.js App Router, it's safer to create it inside the component with useState).
@@ -106,6 +108,7 @@ export function Providers({ children, ...props }: ThemeProviderProps) {
             <NextThemesProvider {...props}>
               {children}
               <SessionExpirationModal isOpen={isSessionModalOpen} onOpenChange={setIsSessionModalOpen} />
+              <ToastContainer position="top-right" autoClose={4000} />
             </NextThemesProvider>
           </GlobalModalContext.Provider>
         </VendorProvider>

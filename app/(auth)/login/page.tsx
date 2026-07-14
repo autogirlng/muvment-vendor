@@ -19,6 +19,22 @@ export default function LoginPage() {
     setError("");
 
     try {
+      // 1. Perform a pre-flight API call to get the exact unmasked error message from the backend
+      const apiRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080"}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      const data = await apiRes.json();
+
+      if (!apiRes.ok || data.status !== "SUCCESSFUL") {
+        setError(data.message || "Invalid email or password.");
+        setIsLoading(false);
+        return;
+      }
+
+      // 2. If valid, trigger NextAuth to establish the session cookies
       const res = await signIn("credentials", {
         redirect: false,
         email,
@@ -26,14 +42,12 @@ export default function LoginPage() {
       });
 
       if (res?.error) {
-        setError(res.error);
+        setError("Failed to establish session. Please try again.");
       } else {
-        // SignIn was successful. Middleware or the next component will handle redirection.
-        // We do a hard redirect to ensure the session context picks up the cookie correctly.
         window.location.href = "/dashboard";
       }
     } catch (err: any) {
-      setError("Login failed. Please check your credentials.");
+      setError("Login failed. Please check your network connection.");
     } finally {
       setIsLoading(false);
     }

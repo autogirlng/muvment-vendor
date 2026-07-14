@@ -108,4 +108,80 @@ export const VendorAPI = {
     }),
 
   myVendors: () => fetchApi<any[]>("/vendors/my-vendors", { method: "GET" }),
+
+  getVendorDetails: (vendorId: string) =>
+    fetchApi<any>(`/vendors/${vendorId}`, { method: "GET" }),
+
+  getKycStatus: (vendorId: string) =>
+    fetchApi<any>(`/vendors/${vendorId}/kyc`, {
+      method: "GET",
+    }),
+
+  submitKyc: (vendorId: string, payload: { rcNumber: string; officeAddress: string; staffCount: number; natureOfServices: string }) =>
+    fetchApi<any>(`/vendors/${vendorId}/kyc`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
+  // --- Team & Invites ---
+
+  inviteStaff: (vendorId: string, payload: { email: string }) =>
+    fetchApi<any>(`/vendors/${vendorId}/staff`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
+  getMembers: (vendorId: string, page: number = 0, size: number = 10) =>
+    fetchApi<any>(`/vendors/${vendorId}/members?page=${page}&size=${size}`, {
+      method: "GET",
+    }),
+
+  getPendingInvites: (vendorId: string) =>
+    fetchApi<any[]>(`/vendors/${vendorId}/invites`, {
+      method: "GET",
+    }),
+
+  cancelInvite: (vendorId: string, inviteId: string) =>
+    fetchApi<any>(`/vendors/${vendorId}/invites/${inviteId}`, {
+      method: "DELETE",
+    }),
+
+  resendInvite: (vendorId: string, inviteId: string) =>
+    fetchApi<any>(`/vendors/${vendorId}/invites/${inviteId}/resend`, {
+      method: "POST",
+    }),
+
+  changeMemberRole: (vendorId: string, userId: string, newRole: "VENDOR_ADMIN" | "VENDOR_STAFF") =>
+    fetchApi<any>(`/vendors/${vendorId}/members/${userId}/role`, {
+      method: "PATCH",
+      body: JSON.stringify({ newRole }),
+    }),
+
+  toggleStaffSuspension: (vendorId: string, userId: string) =>
+    fetchApi<any>(`/vendors/${vendorId}/staff/${userId}/suspend`, {
+      method: "PATCH",
+    }),
+
+  removeStaff: (vendorId: string, userId: string) =>
+    fetchApi<any>(`/vendors/${vendorId}/staff/${userId}`, {
+      method: "DELETE",
+    }),
+
+  // --- API Keys ---
+
+  generateApiKey: (vendorId: string, payload: { name: string }) =>
+    fetchApi<any>(`/vendors/${vendorId}/api-keys`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+
+  getApiKeys: (vendorId: string) =>
+    fetchApi<any[]>(`/vendors/${vendorId}/api-keys`, {
+      method: "GET",
+    }),
+
+  revokeApiKey: (vendorId: string, keyId: string) =>
+    fetchApi<any>(`/vendors/${vendorId}/api-keys/${keyId}`, {
+      method: "DELETE",
+    }),
 };
